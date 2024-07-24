@@ -39,7 +39,7 @@ all: $(TARGET_LIB_EXT) $(TARGET_LIB_STATIC_EXT)
 	@echo "Done.";
 
 $(TARGET_LIB_EXT): $(OBJECTS) $(REDIS_OBJECTS)
-	$(CC) -o $@ -shared -Wl,-soname,${LIBRDB_SONAME_EXT} ${LDFLAGS} $^  $(LIBS)
+	$(CC) -o $@ -shared -Wl,-install_name,${LIBRDB_SONAME_EXT} ${LDFLAGS} $^  $(LIBS)
 
 $(TARGET_LIB_STATIC_EXT): $(OBJECTS) $(REDIS_OBJECTS)
 	ar rcs $@ $^

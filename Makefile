@@ -17,7 +17,13 @@ else
 	PKGCONFIGDIR = $(LIBDIR)/pkgconfig
 endif
 
-LIBRDB_VERSION = $(shell grep -oP '(?<=LIBRDB_VERSION_STRING ")[0-9]+\.[0-9]+\.[0-9]+' ./src/lib/version.h)
+ifneq (,$(filter $(UNAME),Darwin))
+	GREP = ggrep
+else
+	GREP = grep
+endif
+
+LIBRDB_VERSION = $(shell $(GREP) -oP '(?<=LIBRDB_VERSION_STRING ")[0-9]+\.[0-9]+\.[0-9]+' ./src/lib/version.h)
 export LIBRDB_VERSION
 
 # ------------------------- ALL --------------------------------------

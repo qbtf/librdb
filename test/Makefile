@@ -21,8 +21,8 @@ OPTIMIZATION?=-O0
 
 CFLAGS      = -D_DEFAULT_SOURCE -fPIC $(OPTIMIZATION) $(STD) $(STACK) $(WARNS)
 DEBUG       = -g3 -DDEBUG=1
-LIBS        = -l cmocka -L /usr/lib -L $(LIB_DIR) -l $(LIB_NAME) -l $(LIB_NAME_EXT) -l:$(LIBHIREDIS)
-LIBS_STATIC = -l cmocka -L /usr/lib -L $(LIB_DIR) -l:lib$(LIB_NAME_EXT).a -l:$(LIBHIREDIS)
+LIBS        = $(LIBHIREDIS) -l cmocka -L /usr/lib -L $(LIB_DIR) -l $(LIB_NAME) -l $(LIB_NAME_EXT)
+LIBS_STATIC = $(LIBHIREDIS) $(LIB_DIR)/lib$(LIB_NAME_EXT).a -l cmocka -L /usr/lib -L $(LIB_DIR)
 
 ifeq ($(BUILD_TLS),yes)
 CFLAGS+=-DUSE_OPENSSL=1

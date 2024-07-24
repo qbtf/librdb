@@ -3,6 +3,7 @@ lib/*
 .idea/*
 /**/*.o
 /**/*.d
+/**/*.dSYM
 
 /**/rdb-cli.log
 src/cli/rdb-cli
