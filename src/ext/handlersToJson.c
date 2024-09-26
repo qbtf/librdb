@@ -353,7 +353,7 @@ static RdbRes toJsonModule(RdbParser *p, void *userData, RdbBulk moduleName, siz
     }
 
     /* output json part */
-    fprintf(ctx->outfile, "\"<Content of Module '%s'. Occupies a serialized size of %ld bytes>\"",
+    fprintf(ctx->outfile, "\"<Content of Module '%s'. Occupies a serialized size of %zu bytes>\"",
             moduleName,
             serializedSize);
 
