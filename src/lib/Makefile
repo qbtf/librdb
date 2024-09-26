@@ -34,7 +34,7 @@ else
 	CFLAGS += -DNDEBUG=1
 endif
 
-ifneq (,$(filter $(UNAME),Darwin))
+ifneq (,$(filter $(shell uname),Darwin))
     LDFLAG_SONAME = -install_name
 else
     LDFLAG_SONAME = -soname

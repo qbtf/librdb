@@ -104,9 +104,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu-latest', 'macos-13', 'macos-14']
+        os: ['macos-13', 'macos-14']
 
     runs-on: ${{ matrix.os }}
+    env:
+      CC: clang
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -115,9 +117,10 @@ jobs:
 
       - name: Setup clang 15
         run: |
+          brew install grep
           clang_path="$(brew --prefix llvm@15)/bin"
           echo "$clang_path" >> "$GITHUB_PATH"
-          "$clang_path" --version
+          "$clang_path"/clang --version
 
       - name: Install Prerequisites and clone Redis
         run: |
@@ -141,5 +144,7 @@ jobs:
           make -C ~/redis/tests/modules
           popd
           export LIBRDB_REDIS_FOLDER=~/redis/src
-          make clean debug test
+          CFLAGS=-I/usr/local/include make clean debug build_test
+          install_name_tool -add_rpath /usr/local/lib ./test/test_lib
+          ./runtests
         working-directory: ${{github.workspace}}
