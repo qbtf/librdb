@@ -100,3 +100,46 @@ jobs:
           make clean debug test
         working-directory: ${{github.workspace}}
 
+  build-macos-clang:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', 'macos-13', 'macos-14']
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Setup clang 15
+        run: |
+          clang_path="$(brew --prefix llvm@15)/bin"
+          echo "$clang_path" >> "$GITHUB_PATH"
+          "$clang_path" --version
+
+      - name: Install Prerequisites and clone Redis
+        run: |
+          git clone https://git.cryptomilk.org/projects/cmocka.git
+          cd cmocka
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
+          make
+          sudo make install
+          
+          git clone https://github.com/redis/redis.git ~/redis
+        shell: bash
+
+      - name: Test librdb vs. redis-6.2
+        run: |
+          # clang is more strict to shared-obj versioning. Satisfy its needs.
+          pushd ~/redis
+          git checkout 6.2
+          make -j 4 -C ~/redis
+          make -C ~/redis/tests/modules
+          popd
+          export LIBRDB_REDIS_FOLDER=~/redis/src
+          make clean debug test
+        working-directory: ${{github.workspace}}
