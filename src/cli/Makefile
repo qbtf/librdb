@@ -38,6 +38,6 @@ $(TARGET_APP): %: %.c  lib_dependency
 lib_dependency: $(LIB_DIR)/$(LIB_NAME_EXT)
 
 clean:
-	@rm -rvf $(TARGETS) ./*.o ../../bin/$(TARGET_APP)
+	@rm -rvf $(TARGETS) ./*.o ./*.dSYM ../../bin/$(TARGET_APP)
 
 .PHONY: all clean lib_dependency

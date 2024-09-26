@@ -34,6 +34,6 @@ $(TARGET_TEST): %: %.c
 	$(CC) $(CFLAGS) -o $@ $<  $(DEBUG) $(LIBS)
 
 clean:
-	@rm -rvf $(TARGETS) ./*.o;
+	@rm -rvf $(TARGETS) ./*.o ./*.dSYM;
 
 .PHONY: all clean
