@@ -34,12 +34,18 @@ else
 	CFLAGS += -DNDEBUG=1
 endif
 
+ifneq (,$(filter $(UNAME),Darwin))
+    LDFLAG_SONAME = -install_name
+else
+    LDFLAG_SONAME = -soname
+endif
+
 ######################################### RULES #######################################
 all: $(TARGET_LIB) $(TARGET_LIB_STATIC)
 	@echo "Done.";
 
 $(TARGET_LIB): $(OBJECTS) $(REDIS_OBJECTS)
-	$(CC) -o $@ -shared -Wl,-install_name,${LIBRDB_SONAME} ${LDFLAGS} $^
+	$(CC) -o $@ -shared -Wl,${LDFLAG_SONAME},${LIBRDB_SONAME} ${LDFLAGS} $^
 
 $(TARGET_LIB_STATIC): $(OBJECTS) $(REDIS_OBJECTS)
 	ar rcs $@ $^

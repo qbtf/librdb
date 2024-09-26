@@ -34,12 +34,19 @@ LIBS     = -L $(LIB_DIR) -l $(LIB_NAME)
 ifeq ($(BUILD_TLS),yes)
 CFLAGS+=-DUSE_OPENSSL=1
 endif
+
+ifneq (,$(filter $(UNAME),Darwin))
+    LDFLAG_SONAME = -install_name
+else
+    LDFLAG_SONAME = -soname
+endif
+
 ######################################### RULES #######################################
 all: $(TARGET_LIB_EXT) $(TARGET_LIB_STATIC_EXT)
 	@echo "Done.";
 
 $(TARGET_LIB_EXT): $(OBJECTS) $(REDIS_OBJECTS)
-	$(CC) -o $@ -shared -Wl,-install_name,${LIBRDB_SONAME_EXT} ${LDFLAGS} $^  $(LIBS)
+	$(CC) -o $@ -shared -Wl,${LDFLAG_SONAME},${LIBRDB_SONAME_EXT} ${LDFLAGS} $^  $(LIBS)
 
 $(TARGET_LIB_STATIC_EXT): $(OBJECTS) $(REDIS_OBJECTS)
 	ar rcs $@ $^
